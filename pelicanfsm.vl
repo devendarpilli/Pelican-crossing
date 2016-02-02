@@ -1,0 +1,252 @@
+`define PED_DELAY 10     //Pedestrian Crossing Delay
+
+module pelicanfsm(clk,rst,start,NS,SN,EW,WE,NSL,SNL,SNR,NSR,EWL,WEL,EWR,WER,PED_NS_SN,PED_EW_WE);
+input clk,rst,start;
+output [1:0]NS,SN,EW,WE,NSL,SNL,SNR,NSR,EWL,WEL,EWR,WER,PED_NS_SN,PED_EW_WE;
+reg [1:0]NS,SN,EW,WE,NSL,SNL,SNR,NSR,EWL,WEL,EWR,WER,PED_NS_SN,PED_EW_WE;
+parameter RED = 2'b00, YELLOW = 2'b01, GREEN = 2'b11; //Signal
+reg [3:0]state,nxt_st; //State Variables
+
+//State Definition                      NS     SN     EW     WE     NSL    SNL    EWR    WER     EWL    WEL     NSR    SNR       Pedns   pedew
+parameter state0 = 0,                 //RED    RED    RED    RED    RED    RED    RED    RED     RED    RED     RED    RED        RED     RED
+state1 = 1,	                      //RED    RED    RED    RED    GREEN  GREEN  GREEN  GREEN   RED    RED     RED    RED        RED     RED
+state2 = 2,	                      //RED    RED    RED    RED    YELLOW YELLOW YELLOW YELLOW  RED    RED     RED    RED        RED     RED
+state3 = 3,                           //GREEN  GREEN  RED    RED    RED    RED    RED    RED     RED    RED     RED    RED        GREEN   RED
+state4 = 4,	                      //YELLOW YELLOW RED    RED    RED    RED    RED    RED     RED    RED     RED    RED        RED     RED
+state5 = 5,                           //RED    RED    RED    RED    RED    RED    RED    RED     RED    RED     RED    RED        RED     RED
+state6 = 6,	                      //RED    RED    RED    RED    RED    RED    RED    RED     GREEN  GREEN   GREEN  GREEN      RED     RED
+state7 = 7,                           //RED   RED     RED    RED    RED    RED    RED    RED     YELLOW YELLOW  YELLOW YELLOW     RED     RED
+state8 = 8,                           //RED    RED    GREEN  GREEN  RED    RED    RED    RED     RED    RED     RED    RED        RED     GREEN
+state9 = 9;                           //RED    RED    YELLOW YELLOW RED    RED    RED    RED     RED    RED     RED    RED        RED     RED
+
+always@(posedge clk or posedge rst)  //State changes only at positive edge of clock
+begin:register_generation
+if(!rst)
+state = state0;
+else
+state = nxt_st;
+end
+
+always@(state)    // Compute values of main signal and side signal 
+begin:output_logic
+case(state)
+state0:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b00;
+WE = 2'b00;
+NSL = 2'b00;
+SNL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+state1:begin 
+NS = 2'b00; 
+SN = 2'b00; 
+EW = 2'b00;
+WE = 2'b00;
+NSL = 2'b11;
+SNL = 2'b11;
+EWR = 2'b11;
+WER = 2'b11;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state2:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b00;
+WE = 2'b00;
+SNL = 2'b01;
+NSL = 2'b01;
+EWR = 2'b01;
+WER = 2'b01;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state3:begin
+NS = 2'b11;
+SN = 2'b11;
+EW = 2'b00;
+WE = 2'b00;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b11;
+PED_EW_WE = 2'b00;
+end
+
+state4:begin
+NS = 2'b01;
+SN = 2'b01;
+EW = 2'b00;
+WE = 2'b00;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state5:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b00;
+WE = 2'b00;
+NSL = 2'b00;
+SNL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state6:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b00;
+WE = 2'b00;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b11;
+WEL = 2'b11;
+NSR = 2'b11;
+SNR = 2'b11;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state7:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b00;
+WE = 2'b00;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b01;
+WEL = 2'b01;
+NSR = 2'b01;
+SNR = 2'b01;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+
+state8:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b11;
+WE = 2'b11;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b11;
+end
+
+state9:begin
+NS = 2'b00;
+SN = 2'b00;
+EW = 2'b01;
+WE = 2'b01;
+SNL = 2'b00;
+NSL = 2'b00;
+EWR = 2'b00;
+WER = 2'b00;
+EWL = 2'b00;
+WEL = 2'b00;
+NSR = 2'b00;
+SNR = 2'b00;
+PED_NS_SN = 2'b00;
+PED_EW_WE = 2'b00;
+end
+endcase
+end
+
+always@(state or start or posedge clk)  // State machine using case statements 
+begin:nxt_state_logic
+case(state)
+state0:begin
+if(start)
+nxt_st = state1;
+else
+nxt_st = state0;
+end
+state1: begin
+nxt_st = state2;
+$display("Push Button Activated");
+end
+state2: begin 
+nxt_st = state3;
+end
+state3:begin
+nxt_st = state4;
+end
+state4:begin
+$display("Pedestrian Crossing Time is %d sec",`PED_DELAY);
+nxt_st = state5;
+end
+
+state5: begin
+nxt_st = state6;
+$display("Push Button Activated");
+end
+
+state6: begin
+nxt_st = state7;
+end
+
+state7: begin
+nxt_st = state8;
+end
+
+state8: begin
+nxt_st = state9;
+end
+
+state9: begin
+nxt_st = state0;
+$display("Pedestrian Crossing Time is %d sec",`PED_DELAY);
+end
+default:nxt_st = state0;
+endcase
+end
+endmodule

@@ -1,0 +1,30 @@
+module pelicanfsmtb();
+reg clk,rst,start;
+
+wire [1:0] ns,sn,ew,we,nsl,snl,snr,nsr,ewl,wel,ewr,wer,ped_ns_sn,ped_ew_we;
+
+pelicanfsm My_fsm(clk,rst,start,ns,sn,ew,we,nsl,snl,snr,nsr,ewl,wel,ewr,wer,ped_ns_sn,ped_ew_we);
+always@(clk or rst or start)
+begin
+clk = 0; rst = 0;
+#50 rst = 1;
+#600 rst = 0;
+end
+always #20 clk = ~clk;
+initial begin
+start = 0;
+#1;
+#25 start = 1;
+#100 start = 1;
+#50 start = 1;
+//#700 start = 0;
+//#800 start = 1;
+//#900 start = 1;
+#1500
+$finish;
+end
+initial
+begin
+$monitor("clk = %b,rst = %b,start = %b,ns = %2b,sn = %2b,ew = %2b,we = %2b,nsl = %2b,snl = %2b,snr = %2b,nsr = %2b,ewl = %2b,wel = %2b,ewr = %2b,wer = %2b,ped_ns_sn = %2b,ped_ew_we = %2b,time = %t\n",clk,rst,start,ns,sn,ew,we,nsl,snl,snr,nsr,ewl,wel,ewr,wer,ped_ns_sn,ped_ew_we,$time);
+end
+endmodule
